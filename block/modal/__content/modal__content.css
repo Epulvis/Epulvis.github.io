@@ -1,0 +1,30 @@
+.modal__content {
+    position: relative;
+    top: -100px;
+    opacity: 0;
+    margin: 50px auto;
+    padding: 20px;
+    color: #FFF;
+    width: 80%;
+    max-width: 1024px;
+    background-color: #1e1f26;
+    border-radius: 5px;
+    animation: slideDownFadeIn 0.5s forwards;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-areas:
+        "close close"
+        "images Title"
+        "images description"
+        "images rating"
+        "images text"
+        "images seats"
+        "images price"
+        "images button";
+}
+
+@media screen and (max-width: 768px) {
+    .modal__content {
+        max-width: 500px;
+    }
+}

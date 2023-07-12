@@ -1,0 +1,12 @@
+.seat {
+    margin: 2px;
+    padding: 3px;
+    border-radius: 2px;
+    width: 19px;
+    text-align: center;
+    transition: all 0.4s ease;
+    background-color: #1e1f26;
+    color: #cd8c38;
+    border: 1px solid #cd8c38;
+    cursor: pointer;
+}

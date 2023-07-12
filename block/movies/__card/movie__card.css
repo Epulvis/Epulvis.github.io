@@ -1,0 +1,10 @@
+.movie__card {
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    border-radius: 32px;
+    padding: 22px;
+    text-align: center;
+    position: relative;
+    background: linear-gradient(45deg, rgba(255, 255, 255, .05), rgba(205, 140, 56, .15));
+}

@@ -4,11 +4,31 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="./pages/index.css">
         <title>SEA CINEMA</title>
     </head>
 
     <body>
-        <header class="header">helo world</header>
+        <header class="header">
+            <h1 class="header__title">SEA CINEMA</h1>
+        </header>
+        <main class="page">
+            <div id="movies__container"></div>
+            <section id="modal" class="modal">
+                <div class="modal__content">
+                    <span class="close">&times;</span>
+                    <p class="modal__text">Select your seats</p>
+                    <img src="" alt="gambar film" class="modal__images">
+                    <h2 class="modal__title">Modal Title</h2>
+                    <p class="modal__description"></p>
+                    <span class="modal__rating"></span>
+                    <div id="seats__container"></div>
+                    <p class="modal__price"></p>
+                    <button class="modal__button">CHECKOUT</button>
+                </div>
+            </section>
+        </main>
+        <script src="./vendor/script.js"></script>
     </body>
 
 </html>

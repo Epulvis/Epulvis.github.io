@@ -1,0 +1,8 @@
+#seats__container {
+    grid-area: seats;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    height: fit-content;
+    gap: 20px;
+}

@@ -1,0 +1,5 @@
+.movie__title {
+    margin: 1rem 0 0;
+    color: #a9a9a9;
+    font-size: calc(var(--_size) / 10);
+}

@@ -1,0 +1,16 @@
+.close {
+    color: #FFF;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    grid-area: close;
+    text-align: end;
+}
+
+.close:hover,
+.close:focus {
+    color: #cd8c38;
+    text-decoration: none;
+    cursor: pointer;
+}
