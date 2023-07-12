@@ -96,13 +96,89 @@ modal.style.display = "none";});
 
 const checkoutButton = document.querySelector(".modal__button");
 checkoutButton.addEventListener("click", () => {
+
+const name = document.getElementById("name").value;
+console.log("Name:", name);
+
 const modalTitle = document.querySelector(".modal__content h2").textContent;
 console.log("Title:", modalTitle);
 
 const unselectedSeats = document.querySelectorAll(".seat[style='background-color: rgb(205, 140, 56); pointer-events: none;']");
 unselectedSeats.forEach((seat) => {
 console.log("Selected Seats:", seat.innerText); });
-  
+
 const totalPrice = parseInt(document.querySelector(".modal__price").textContent.split(" ")[1]);
-console.log("Total Price:", totalPrice);  
+console.log("Total Price:", totalPrice);
+
+});
+
+// top up
+const topUpBtn = document.getElementById("topUpBtn");
+const balanceElement = document.querySelector(".balance");
+
+if (localStorage.getItem("balance")) {
+const savedBalance = parseFloat(localStorage.getItem("balance"));
+balanceElement.textContent = "Rp " + savedBalance.toLocaleString("id-ID");
+}
+
+topUpBtn.addEventListener("click", function () {
+const amount = prompt("Masukkan jumlah top up:");
+
+const topUpAmount = parseFloat(amount);
+
+if (!isNaN(topUpAmount) && topUpAmount > 0) {
+
+const currentBalance = parseFloat(
+balanceElement.textContent.slice(3).replace(/\./g, "")
+);
+
+const newBalance = currentBalance + topUpAmount;
+
+const formattedBalance = newBalance.toLocaleString("id-ID");
+
+balanceElement.textContent = "Rp " + formattedBalance;
+
+localStorage.setItem("balance", newBalance);
+
+alert("Top up berhasil! Saldo baru: Rp " + formattedBalance);
+} else {
+
+alert("Jumlah top up tidak valid!");
+}
+});
+
+// withdraw
+const withdrawBtn = document.getElementById("withdrawBtn");
+
+withdrawBtn.addEventListener("click", function () {
+
+const amount = prompt("Masukkan jumlah withdraw:");
+
+const withdrawAmount = parseFloat(amount);
+
+if (!isNaN(withdrawAmount) && withdrawAmount > 0) {
+
+const currentBalance = parseFloat(
+balanceElement.textContent.slice(3).replace(/\./g, "")
+);
+
+if (currentBalance >= withdrawAmount) {
+
+const newBalance = currentBalance - withdrawAmount;
+
+const formattedBalance = newBalance.toLocaleString("id-ID");
+
+balanceElement.textContent = "Rp " + formattedBalance;
+
+localStorage.setItem("balance", newBalance);
+
+alert("Withdraw berhasil! Saldo baru: Rp " + formattedBalance);
+} else {
+
+alert("Saldo tidak mencukupi!");
+}
+} else {
+
+alert("Jumlah withdraw tidak valid!");
+}
 });

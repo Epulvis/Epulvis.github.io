@@ -1,3 +1,4 @@
 .modal__button {
     grid-area: button;
+    background-color: #1e1f26;
 }

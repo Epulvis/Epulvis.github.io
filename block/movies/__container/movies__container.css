@@ -1,6 +1,26 @@
 #movies__container {
+    display: -ms-grid;
     display: grid;
+    -ms-grid-columns: 1fr 4rem 1fr 4rem 1fr 4rem 1fr;
     grid-template-columns: repeat(4, 1fr);
     justify-items: center;
     gap: 4rem;
+}
+
+@media screen and (max-width: 1000px) {
+    #movies__container {
+        grid-template-columns: repeat(3, 1fr);
+    }
+}
+
+@media screen and (max-width: 785px) {
+    #movies__container {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media screen and (max-width: 530px) {
+    #movies__container {
+        grid-template-columns: 1fr
+    }
 }

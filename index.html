@@ -12,6 +12,15 @@
         <header class="header">
             <h1 class="header__title">SEA CINEMA</h1>
         </header>
+        <nav>
+            <ul>
+                <li><a href="#" class="button" id="topUpBtn">Top Up</a></li>
+                <li><a href="#" class="button" id="withdrawBtn">Withdraw</a></li>
+                <li><a href="#" class="button" id="tiketBtn">Tiket</a></li>
+            </ul>
+            <p class="balance">Rp 0</p>
+        </nav>
+
         <main class="page">
             <div id="movies__container"></div>
             <section id="modal" class="modal">
@@ -24,7 +33,12 @@
                     <span class="modal__rating"></span>
                     <div id="seats__container"></div>
                     <p class="modal__price"></p>
-                    <button class="modal__button">CHECKOUT</button>
+                    <form class="modal__form" id="identityForm">
+                        <input class="label" type="text" placeholder="Name" id="name" required
+                            autocomplete="given-name">
+                        <input class="label" type="number" placeholder="Age" id="age" required autocomplete="given-age">
+                    </form>
+                    <button class=" button modal__button">CHECKOUT</button>
                 </div>
             </section>
         </main>

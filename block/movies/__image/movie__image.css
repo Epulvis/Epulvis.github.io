@@ -1,5 +1,6 @@
 .movie__image {
     width: 100%;
+    -o-object-fit: cover;
     object-fit: cover;
     border-radius: 24px;
     margin: 0 auto;
