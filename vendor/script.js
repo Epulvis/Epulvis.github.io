@@ -1,184 +1,274 @@
-fetch("https://seleksi-sea-2023.vercel.app/api/movies")
-.then((response) => response.json())
-.then((data) => {
-// Render movies on the page
 const moviesContainer = document.getElementById("movies__container");
-
-data.forEach((movie) => {
-const movieCard = document.createElement("div");
-movieCard.classList.add("movie__card");
-
-const poster = document.createElement("img");
-poster.classList.add("movie__image");
-poster.src = movie.poster_url;
-movieCard.appendChild(poster);
-
-const title = document.createElement("h2");
-title.classList.add("movie__title");
-title.textContent = movie.title;
-movieCard.appendChild(title);
-
-// Menampilkan modal saat movie__card diklik
-movieCard.addEventListener("click", () => {
 const modal = document.getElementById("modal");
-modal.style.display = "block";
-
-// Mengisi konten modal dengan informasi film
-const movieTitle = movieCard.querySelector(".movie__title").textContent;
-const modalTitle = document.querySelector(".modal__content h2");
-modalTitle.textContent = movieTitle;
-
-const movieImage = movieCard.querySelector(".movie__image").src;
+const seatsContainer = document.getElementById("seats__container");
+const nameInput = document.getElementById("name");
+const ageInput = document.getElementById("age");
+const modalTitleElement = document.querySelector(".modal__content h2");
 const modalImage = document.querySelector(".modal__content img");
-modalImage.src = movieImage;
-
 const modalDescription = document.querySelector(".modal__description");
-modalDescription.textContent = movie.description;
-
 const modalRating = document.querySelector(".modal__rating");
-modalRating.textContent = `Age Rating: ${movie.age_rating}`;
+const modalPriceElement = document.querySelector(".modal__price");
+const modalPrice = document.querySelector(".modal__price");
+const balanceElement = document.querySelector(".balance");
+const ticketContainer = document.querySelector(".card__ticket");
+const ticketTitleElement = document.querySelector(".ticket__title");
+const ticketMovieElement = document.querySelector(".ticket__movie");
+const ticketNameElement = document.querySelector(".ticket__name");
+const ticketPriceElement = document.querySelector(".ticket__price");
+const closeModal = document.querySelector(".close");
+const topUpBtn = document.getElementById("topUpBtn");
+const withdrawBtn = document.getElementById("withdrawBtn");
+const tiketBtn = document.getElementById("tiketBtn");
+const card = document.querySelector(".tiket");
+const closeCard = document.querySelector(".card__close");
+const checkoutButton = document.getElementById("checkoutButton");
 
-let modalPrice = document.querySelector(".modal__price");
-modalPrice.textContent = `Price: 0`; // Set initial price to 0
+let balance = localStorage.getItem("balance") || 0;
+const formattedBalance = parseFloat(balance).toLocaleString("id-ID");
+balanceElement.textContent = `Rp ${formattedBalance}`;
 
-// Daftar kursi yang tersedia
+if (balance === 0) {
+  localStorage.setItem("balance", balance);
+}
+
+let selectedMovie;
+
+let selectedSeats = {};
 const availableSeats = Array(64).fill(true);
 
-// Kursi yang dipilih oleh pengguna
-const selectedSeats = [];
+fetch("https://seleksi-sea-2023.vercel.app/api/movies")
+  .then((response) => response.json())
+  .then((data) => {
+    renderMovies(data);
+  })
+  .catch((error) => {
+    console.error("Error:", error);
+  });
 
-// Fungsi untuk memperbarui tampilan kursi
+function renderMovies(data) {
+  data.forEach((movie) => {
+    const movieCard = createMovieCard(movie);
+    moviesContainer.appendChild(movieCard);
+  });
+}
+
+function createMovieCard(movie) {
+  const movieCard = document.createElement("div");
+  movieCard.classList.add("movie__card");
+
+  const poster = document.createElement("img");
+  poster.classList.add("movie__image");
+  poster.src = movie.poster_url;
+  movieCard.appendChild(poster);
+
+  const title = document.createElement("h2");
+  title.classList.add("movie__title");
+  title.textContent = movie.title;
+  movieCard.appendChild(title);
+
+  movieCard.addEventListener("click", () => {
+    showModal(movie);
+  });
+
+  return movieCard;
+}
+
+function showModal(movie) {
+  if (!selectedSeats[movie.title]) {
+    selectedSeats[movie.title] = [];
+  } else {
+    selectedSeats[movie.title].forEach((seatIndex) => {
+      availableSeats[seatIndex] = true;
+    });
+    selectedSeats[movie.title] = [];
+  }
+
+  modal.style.display = "block";
+  selectedMovie = movie;
+
+  modalTitleElement.textContent = movie.title;
+  modalImage.src = movie.poster_url;
+  modalDescription.textContent = movie.description;
+  modalRating.textContent = `Age Rating: ${movie.age_rating}`;
+  modalPrice.textContent = "Price: Rp 0";
+
+  updateSeats();
+}
+
 function updateSeats() {
-const seatsContainer = document.getElementById("seats__container");
-seatsContainer.innerHTML = "";
+  seatsContainer.innerHTML = "";
 
-for (let i = 0; i < availableSeats.length; i++) {
-const seat = document.createElement("div");
-seat.className = "seat";
-seat.innerText = i + 1;
+  for (let i = 0; i < availableSeats.length; i++) {
+    const seat = document.createElement("div");
+    seat.className = "seat";
+    seat.innerText = i + 1;
 
-if (!availableSeats[i]) {
-seat.style.backgroundColor = "#cd8c38";
-seat.style.pointerEvents = "none";
-} else {
-seat.addEventListener("click", () => selectSeat(i));
+    if (!availableSeats[i]) {
+      seat.style.backgroundColor = "#cd8c38";
+      seat.style.pointerEvents = "none";
+    } else {
+      seat.addEventListener("click", () => selectSeat(i));
+    }
+
+    seatsContainer.appendChild(seat);
+  }
 }
 
-seatsContainer.appendChild(seat);
-}
-}
-
-// Fungsi untuk memilih kursi
 function selectSeat(seatIndex) {
-if (selectedSeats.length < 6 && availableSeats[seatIndex]) {
-selectedSeats.push(seatIndex);
-availableSeats[seatIndex] = false;
-updateSeats();
+  if (
+    selectedSeats[selectedMovie.title].length < 6 &&
+    availableSeats[seatIndex]
+  ) {
+    selectedSeats[selectedMovie.title].push(seatIndex);
+    availableSeats[seatIndex] = false;
+    updateSeats();
 
-// Perbarui harga berdasarkan jumlah kursi yang dipilih
-modalPrice.textContent = `Price: ${selectedSeats.length * movie.ticket_price}`;
+    modalPrice.textContent = `Price: Rp ${
+  (selectedSeats[selectedMovie.title].length * selectedMovie.ticket_price).toLocaleString("id-ID")
+}`;
+  }
 }
+
+checkoutButton.addEventListener("click", handleCheckout);
+
+function handleCheckout() {
+  const name = nameInput.value;
+  const age = parseInt(ageInput.value);
+  const totalPrice = selectedSeats[selectedMovie.title].length * selectedMovie.ticket_price;
+  const modalTitle = modalTitleElement.textContent;
+  
+  if (!name || !age || totalPrice === 0) {
+    alert("Harap isi semua kolom dan pilih seat yang tersedia");
+    return;
+  }
+
+  const ageRating = `Age Rating: ${selectedMovie.age_rating}`;
+  modalRating.textContent = ageRating;
+
+  let newBalance = parseFloat(localStorage.getItem("balance")) - totalPrice;
+
+  if (isNaN(newBalance)) {
+    alert("Terjadi kesalahan. Harap coba lagi.");
+    return;
+  }
+
+  if (age < selectedMovie.age_rating) {
+    alert("Maaf umur anda kurang:");
+    return;
+  }
+
+  if (newBalance <= 0) {
+    alert("Saldo tidak mencukupi. Harap melakukan top up.");
+    return;
+  }
+
+  localStorage.setItem("balance", newBalance.toString());
+  balanceElement.textContent = `Rp ${newBalance.toLocaleString("id-ID")}`;
+
+  selectedSeats[selectedMovie.title].length = 0;
+  const selectedSeatsCount = selectedSeats[selectedMovie.title].length;
+
+  ticketMovieElement.textContent = selectedMovie.title;
+  ticketNameElement.textContent = name;
+  ticketPriceElement.textContent = `Rp ${totalPrice.toLocaleString("id-ID")}`;
+  
+  const selectedSeatsElements = document.querySelectorAll(
+    `.seat[style='background-color: rgb(205, 140, 56); pointer-events: none;']`
+  );
+
+  let ticketSeat2Element = document.getElementById("ticketSeat2");
+
+  if (ticketSeat2Element === null) {
+  const ticketContainer = document.createElement("div");
+  ticketContainer.classList.add("ticket__container", "ticket__second");
+
+  const eye = document.createElement("div");
+  eye.classList.add("eye");
+
+  ticketSeat2Element = document.createElement("h3");
+  ticketSeat2Element.classList.add("ticket__seat");
+  ticketSeat2Element.id = "ticketSeat2";
+    
+  const ticketInfo = document.createElement("span");
+  ticketInfo.classList.add("ticket__info");
+  ticketInfo.textContent = "seat";
+
+  ticketContainer.appendChild(eye);
+  ticketContainer.appendChild(ticketSeat2Element);
+  ticketContainer.appendChild(ticketInfo);
+
+  const ticketContainerParent = document.querySelector(".card__ticket");
+  ticketContainerParent.appendChild(ticketContainer);
 }
 
-updateSeats();
-});
+ticketSeat2Element.textContent = selectedSeats[selectedMovie.title][1] + 1;
 
-moviesContainer.appendChild(movieCard);});
-})
-.catch((error) => {
-console.error("Error:", error);});
 
-// Menutup modal saat tombol close diklik
-const closeModal = document.querySelector(".close");
+  modal.style.display = "none";
+  card.style.display = "block";
+}
+
+
+
 closeModal.addEventListener("click", () => {
-const modal = document.getElementById("modal");
-modal.style.display = "none";});
-
-const checkoutButton = document.querySelector(".modal__button");
-checkoutButton.addEventListener("click", () => {
-
-const name = document.getElementById("name").value;
-console.log("Name:", name);
-
-const modalTitle = document.querySelector(".modal__content h2").textContent;
-console.log("Title:", modalTitle);
-
-const unselectedSeats = document.querySelectorAll(".seat[style='background-color: rgb(205, 140, 56); pointer-events: none;']");
-unselectedSeats.forEach((seat) => {
-console.log("Selected Seats:", seat.innerText); });
-
-const totalPrice = parseInt(document.querySelector(".modal__price").textContent.split(" ")[1]);
-console.log("Total Price:", totalPrice);
-
+  modal.style.display = "none";
 });
 
-// top up
-const topUpBtn = document.getElementById("topUpBtn");
-const balanceElement = document.querySelector(".balance");
+// Top-up button event listener
+topUpBtn.addEventListener("click", function() {
+  const amount = prompt("Masukkan jumlah top up:");
+  const topUpAmount = parseFloat(amount);
 
-if (localStorage.getItem("balance")) {
-const savedBalance = parseFloat(localStorage.getItem("balance"));
-balanceElement.textContent = "Rp " + savedBalance.toLocaleString("id-ID");
-}
+  if (!isNaN(topUpAmount) || topUpAmount <= 0) {
+    const currentBalance = parseFloat(balanceElement.textContent.slice(3).replace(/\./g, ""));
+    const newBalance = currentBalance + topUpAmount;
 
-topUpBtn.addEventListener("click", function () {
-const amount = prompt("Masukkan jumlah top up:");
+    if (!isNaN(newBalance)) {
+      const formattedBalance = newBalance.toLocaleString("id-ID");
+      balanceElement.textContent = "Rp " + formattedBalance;
+      localStorage.setItem("balance", newBalance);
 
-const topUpAmount = parseFloat(amount);
-
-if (!isNaN(topUpAmount) && topUpAmount > 0) {
-
-const currentBalance = parseFloat(
-balanceElement.textContent.slice(3).replace(/\./g, "")
-);
-
-const newBalance = currentBalance + topUpAmount;
-
-const formattedBalance = newBalance.toLocaleString("id-ID");
-
-balanceElement.textContent = "Rp " + formattedBalance;
-
-localStorage.setItem("balance", newBalance);
-
-alert("Top up berhasil! Saldo baru: Rp " + formattedBalance);
-} else {
-
-alert("Jumlah top up tidak valid!");
-}
+      alert("Top up berhasil! Saldo baru: Rp " + formattedBalance);
+    } else {
+      alert("Terjadi kesalahan. Harap coba lagi.");
+    }
+  } else {
+    alert("Jumlah top up tidak valid!");
+  }
 });
 
-// withdraw
-const withdrawBtn = document.getElementById("withdrawBtn");
+withdrawBtn.addEventListener("click", function() {
+  const amount = prompt("Masukkan jumlah withdraw:");
+  const withdrawAmount = parseFloat(amount);
 
-withdrawBtn.addEventListener("click", function () {
+  if (!isNaN(withdrawAmount) || withdrawAmount <= 0) {
+    const currentBalance = parseFloat(balanceElement.textContent.slice(3).replace(/\./g, ""));
 
-const amount = prompt("Masukkan jumlah withdraw:");
+    if (currentBalance >= withdrawAmount) {
+      const newBalance = currentBalance - withdrawAmount;
 
-const withdrawAmount = parseFloat(amount);
+      if (!isNaN(newBalance)) {
+        balance = newBalance;
+        localStorage.setItem("balance", newBalance);
 
-if (!isNaN(withdrawAmount) && withdrawAmount > 0) {
+        alert("Withdraw berhasil! Saldo baru: Rp " + newBalance.toLocaleString("id-ID"));
+      } else {
+        alert("Terjadi kesalahan. Harap coba lagi.");
+      }
+    } else {
+      alert("Saldo tidak mencukupi!");
+    }
+  } else {
+    alert("Jumlah withdraw tidak valid!");
+  }
+});
 
-const currentBalance = parseFloat(
-balanceElement.textContent.slice(3).replace(/\./g, "")
-);
 
-if (currentBalance >= withdrawAmount) {
 
-const newBalance = currentBalance - withdrawAmount;
+tiketBtn.addEventListener("click", () => {
+  card.style.display = "block";
+});
 
-const formattedBalance = newBalance.toLocaleString("id-ID");
-
-balanceElement.textContent = "Rp " + formattedBalance;
-
-localStorage.setItem("balance", newBalance);
-
-alert("Withdraw berhasil! Saldo baru: Rp " + formattedBalance);
-} else {
-
-alert("Saldo tidak mencukupi!");
-}
-} else {
-
-alert("Jumlah withdraw tidak valid!");
-}
+closeCard.addEventListener("click", () => {
+  card.style.display = "none";
 });

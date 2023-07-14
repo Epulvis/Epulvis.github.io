@@ -7,7 +7,7 @@
 @import url(../block/modal/__content/modal__content.css);
 @import url(../block/modal/__button/modal__button.css);
 @import url(../block/modal/__description/modal__description.css);
-@import url(../block/modal/__images/modal__images.css);
+@import url(../block/modal/__image/modal__image.css);
 @import url(../block/modal/__price/modal__price.css);
 @import url(../block/modal/__rating/modal__rating.css);
 @import url(../block/modal/__text/modal__text.css);
@@ -18,3 +18,107 @@
 @import url(../block/label/label.css);
 @import url(../block/close/close.css);
 @import url(../block/nav/nav.css);
+
+.tiket {
+    display: none;
+    position: fixed;
+    z-index: 999;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+.card__container {
+    position: relative;
+    top: -100px;
+    opacity: 0;
+    margin: 50px auto;
+    padding: 20px;
+    max-width: 1080px;
+    background-color: #1e1f26;
+    border-radius: 5px;
+    -webkit-animation: slideDownFadeIn 0.5s forwards;
+    animation: slideDownFadeIn 0.5s forwards;
+}
+
+.ticket__container {
+    background: linear-gradient(to bottom, #cd8c38 0%, #cd8c38 26%, #ecedef 26%, #ecedef 100%);
+    position: relative;
+    padding: 1em;
+    margin-top: 100px;
+    border-radius: 8px;
+}
+
+.ticket__movie,
+.ticket__name,
+.ticket__price {
+    margin: 2em 0 0 0;
+    text-transform: uppercase;
+    font-weight: normal;
+    font-size: 0.9em;
+}
+
+.ticket__info {
+    font-size: 0.7em;
+    color: #a2aeae;
+}
+
+.ticket__second {
+    width: 6.5em;
+    border-left: 0.18em dashed #000;
+    text-align: center;
+}
+
+.card__ticket {
+    display: flex;
+}
+
+.ticket__main {
+    width: 16em;
+}
+
+.eye {
+    position: relative;
+    width: 2em;
+    height: 1.5em;
+    background: #fff;
+    margin: 0 auto;
+    border-radius: 1em/0.6em;
+    z-index: 1;
+}
+
+.eye:before,
+.eye:after {
+    content: "";
+    display: block;
+    position: absolute;
+    border-radius: 50%;
+}
+
+.eye:before {
+    width: 1em;
+    height: 1em;
+    background: #cd8c38;
+    z-index: 2;
+    left: 8px;
+    top: 4px;
+}
+
+.eye:after {
+    width: 0.5em;
+    height: 0.5em;
+    background: #fff;
+    z-index: 3;
+    left: 12px;
+    top: 8px;
+}
+
+.ticket__seat {
+    color: #e84c3d;
+    margin: 0.9em 0 0 0;
+    font-size: 2.5em;
+    text-align: center;
+}

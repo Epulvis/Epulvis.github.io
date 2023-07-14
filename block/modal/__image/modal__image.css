@@ -1,0 +1,15 @@
+.modal__image {
+    grid-area: images;
+}
+
+@media screen and (max-width: 500px) {
+    .modal__image {
+        width: 100%;
+    }
+}
+
+@media screen and (max-width: 1060px) {
+    .modal__image {
+        width: 90%;
+    }
+}

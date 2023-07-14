@@ -27,7 +27,7 @@
                 <div class="modal__content">
                     <span class="close">&times;</span>
                     <p class="modal__text">Select your seats</p>
-                    <img src="" alt="gambar film" class="modal__images">
+                    <img src="#" alt="gambar film" class="modal__image">
                     <h2 class="modal__title">Modal Title</h2>
                     <p class="modal__description"></p>
                     <span class="modal__rating"></span>
@@ -38,7 +38,29 @@
                             autocomplete="given-name">
                         <input class="label" type="number" placeholder="Age" id="age" required autocomplete="given-age">
                     </form>
-                    <button class=" button modal__button">CHECKOUT</button>
+                    <button class="button modal__button" id="checkoutButton">CHECKOUT</button>
+                </div>
+            </section>
+            <section class="tiket">
+                <div class="card__container">
+                    <span class="card__close">&times;</span>
+                    <div class="card__ticket">
+                        <div class="ticket__container ticket__main">
+                            <h2 class="ticket__title">SEA Cinema</h2>
+                            <h3 class="ticket__movie">Nama film</h3>
+                            <span class="ticket__info">movie</span>
+                            <h3 class="ticket__name">Nama pembeli</h3>
+                            <span class="ticket__info">name</span>
+                            <h3 class="ticket__price">total price</h3>
+                            <span class="ticket__info">price</span>
+                        </div>
+                        <div class="ticket__container ticket__second">
+                            <div class="eye"></div>
+                            <h3 class="ticket__seat" id="ticketSeat1">00</h3>
+                            <span class="ticket__info">seat</span>
+                        </div>
+                    </div>
+                    <button class="delete-button">Delete</button>
                 </div>
             </section>
         </main>

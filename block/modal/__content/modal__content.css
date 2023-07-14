@@ -31,6 +31,19 @@
     }
 }
 
+@media screen and (max-width: 940px) {
+    .modal__content {
+        grid-template-areas:
+            "close close"
+            "images text"
+            "images seats"
+            "images price"
+            "Title form"
+            "description form"
+            "rating button";
+    }
+}
+
 @media screen and (max-width: 768px) {
     .modal__content {
         max-width: 500px;
